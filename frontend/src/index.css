@@ -1,0 +1,48 @@
+.ant-card-head{
+  background-color:#EC9F20 !important;
+}
+
+.ant-card-head-title {
+  text-align: center;
+  color: white;
+}
+
+.sign-up-text>.ant-btn {
+  color:#EC9F20 !important;
+  text-decoration: underline;
+}
+
+.custom-panels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.custom-panels .ant-card{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.login-signup-btns{
+  margin:15px 0px;
+  text-align: center;
+}
+
+.user-details{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 18x;
+  margin:10px
+}
+.userList-Panels{
+  margin:12px 0px
+}
+
+.editModal>div>.ant-modal-content{
+  padding-top: 30px;
+}
+
+.custom-userlist-panel>.ant-card-cover>img{
+  height: 300px;
+  border-radius: 0px;
+}
+
+
