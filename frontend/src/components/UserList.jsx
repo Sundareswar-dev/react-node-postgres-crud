@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Row, Modal, Input } from "antd";
+import { Button, Card, Col, Row, Modal, Input, Dropdown } from "antd";
+import {SearchOutlined} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getUsers, deleteUser, updateUser } from "../api/userApi";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const[backUpUsers,setBackUpUsers]=useState([])
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
@@ -17,13 +19,13 @@ const UserList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("check")
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
+    const fetchUsers = async () => {
     const data = await getUsers();
     setUsers(data);
+    setBackUpUsers(data)
   };
 
   const handleLogout=()=>{
@@ -74,6 +76,43 @@ const UserList = () => {
     setIsModalOpen(false);
   };
 
+  const handleSearch=(value)=>{
+    if(value.length!= 0){
+      const filteredUsers=users.filter((data)=>{
+          return data.name.toLowerCase().includes(value.toLowerCase())
+      })
+      setUsers(filteredUsers)
+    }
+    else{
+      fetchUsers()
+    }
+
+  }
+
+  const handleDropDown=()=>{
+    const uniqueRoles = ["all",...new Set(backUpUsers.map(user => user.role))];
+     const menuItems=uniqueRoles.map((data)=>{
+       return {
+        key:data,
+        label:data,
+        onClick:handleDropDownClick
+       }
+     })
+     return {items:menuItems};
+  }
+
+  const handleDropDownClick=(e)=>{
+    if(e.key!=="all"){
+    const Filtereddata=backUpUsers.filter((data)=>{
+        return data.role===e.key
+    })
+    setUsers(Filtereddata)
+  }
+  else{
+    fetchUsers()
+  }
+  }
+
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>
@@ -82,11 +121,19 @@ const UserList = () => {
           <Button type="primary" style={{marginTop:15}} onClick={handleLogout}>Log Out</Button>
         </div>
       </h2>
-      <Row justify="space-between">
+      <Row justify="space-between" style={{marginBottom: 20}}>
         <Col>
           <Button type="primary" onClick={() => navigate("/")}>
             Back
           </Button>
+        </Col>
+        <Col>
+        <Input placeholder="Search" prefix={<SearchOutlined />} onChange={(e)=>handleSearch(e.target.value)}/>
+        </Col>
+        <Col>
+        <Dropdown menu={handleDropDown()} trigger={['click']} onClick={(e)=>{console.log(e)}}>
+        <Button>Role Based Filter</Button>
+        </Dropdown>
         </Col>
         <Col>
           <Button type="primary" onClick={() => navigate("/adduser")}>
